@@ -38,6 +38,10 @@ export default function Orders() {
               {order.dish_name}
             </h2>
 
+            <p className="text-gray-400 text-sm">
+  Order ID: #{order.id}
+</p>
+
             <p className="text-gray-500">
               Quantity: {order.quantity}
             </p>
