@@ -23,6 +23,7 @@ export default function Login() {
     console.log("DATA:", res.data);
     console.log("USER:", res.data.user);
     // ✅ SAVE USER
+    localStorage.removeItem("user"); // clear old user
     localStorage.setItem("user", JSON.stringify(res.data.user));
 
     navigate("/menu");
@@ -48,7 +49,7 @@ export default function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button className="bg-orange-500 text-white px-4 py-2">
+      <button  className="bg-orange-500 text-white px-4 py-2">
         Login
       </button>
     </form>

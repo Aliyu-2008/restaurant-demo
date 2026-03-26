@@ -13,4 +13,4 @@ export const getDishes = () => API.get("/dishes");
 
 // Orders endpoints
 export const placeOrder = (data) => API.post("/orders", data);
-export const getOrders = () => API.get("/orders");
+export const getOrders = () => API.get(`/orders/${user.id}`);

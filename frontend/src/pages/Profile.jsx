@@ -1,75 +1,53 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const [edit, setEdit] = useState(false);
+
+  const loadUser = () => {
+    try {
+      const stored = localStorage.getItem("user");
+
+      if (!stored) {
+        setUser(null);
+        return;
+      }
+
+      const parsed = JSON.parse(stored);
+      setUser(parsed);
+    } catch (err) {
+      console.log("Parse error:", err);
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
+    loadUser();
+
+    // 🔥 listen for changes (important)
+    window.addEventListener("storage", loadUser);
+
+    return () => {
+      window.removeEventListener("storage", loadUser);
+    };
   }, []);
 
-  if (!user) return <p className="p-6">No user data</p>;
-
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  const saveChanges = () => {
-    localStorage.setItem("user", JSON.stringify(user));
-    setEdit(false);
-  };
+  if (!user) {
+    return <p className="p-6">No user data</p>;
+  }
 
   return (
     <div className="p-6 max-w-md mx-auto">
-
       <div className="card">
 
-        <h1 className="text-2xl font-bold mb-4">Profile</h1>
+        <h1 className="text-2xl font-bold mb-4">Profile 👤</h1>
 
-        {edit ? (
-          <>
-            <input
-              name="fullName"
-              value={user.fullName}
-              onChange={handleChange}
-              className="border p-2 w-full mb-2"
-            />
+        <p><strong>ID:</strong> {user.id}</p>
+        <p><strong>Full Name:</strong> {user.fullName}</p>
+        <p><strong>Username:</strong> {user.username}</p>
+        <p><strong>Email:</strong> {user.email}</p>
+        <p><strong>Phone:</strong> {user.phone}</p>
 
-            <input
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className="border p-2 w-full mb-2"
-            />
-
-            <input
-              name="phone"
-              value={user.phone}
-              onChange={handleChange}
-              className="border p-2 w-full mb-2"
-            />
-
-            <button onClick={saveChanges} className="btn btn-primary w-full">
-              Save
-            </button>
-          </>
-        ) : (
-          <>
-            <p><strong>Name:</strong> {user.fullName}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Phone:</strong> {user.phone}</p>
-
-            <button
-              onClick={() => setEdit(true)}
-              className="btn btn-primary mt-4 w-full"
-            >
-              Edit Profile
-            </button>
-          </>
-        )}
       </div>
-
     </div>
   );
 }

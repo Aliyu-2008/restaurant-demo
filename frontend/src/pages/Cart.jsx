@@ -15,6 +15,9 @@ export default function Cart() {
         dish_id: item.id,
         quantity: 1
       });
+      if (cart.length === 0) {
+        alert("Car is empty");
+      }
     }
 
     alert("Order placed successfully 🎉");

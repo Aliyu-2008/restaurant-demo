@@ -15,9 +15,21 @@ router.post('/', (req, res) => {
 });
 
 // Get all orders
-router.get('/', (req, res) => {
+router.get("/:userId", (req, res) => {
+  const { userId } = req.params;
+
   try {
-    const orders = db.prepare(`SELECT * FROM orders`).all();
+    const orders = db.prepare(`
+      SELECT 
+        orders.id,
+        orders.quantity,
+        dishes.name AS dish_name,
+        dishes.price
+      FROM orders
+      JOIN dishes ON orders.dish_id = dishes.id
+      WHERE orders.user_id = ?
+    `).all(userId);
+
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
