@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { loginUser } from "../api";
 import { useNavigate } from "react-router-dom";
 import { login } from "../utils/auth";
@@ -10,18 +11,27 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      await loginUser({ username, password });
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      { username, password }
+    );
 
-      login("user-token");
+    console.log("LOGIN RESPONSE:", res); // 👈 DEBUG
+    console.log("DATA:", res.data);
+    console.log("USER:", res.data.user);
+    // ✅ SAVE USER
+    localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      navigate("/menu"); // ✅ redirect
-    } catch {
-      alert("Login failed");
-    }
-  };
+    navigate("/menu");
+
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+    alert("Login failed");
+  }
+};
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -42,5 +52,6 @@ export default function Login() {
         Login
       </button>
     </form>
+
   );
 }

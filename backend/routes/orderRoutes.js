@@ -9,6 +9,7 @@ router.post('/', (req, res) => {
     db.prepare('INSERT INTO orders (user_id, dish_id, quantity) VALUES (?, ?, ?)').run(userId, dishId, quantity);
     res.status(201).json({ message: 'Order placed successfully' });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -16,12 +17,7 @@ router.post('/', (req, res) => {
 // Get all orders
 router.get('/', (req, res) => {
   try {
-    const orders = db.prepare(`
-      SELECT o.id, u.name as user, d.name as dish, o.quantity
-      FROM orders o
-      JOIN users u ON o.user_id = u.id
-      JOIN dishes d ON o.dish_id = d.id
-    `).all();
+    const orders = db.prepare(`SELECT * FROM orders`).all();
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });

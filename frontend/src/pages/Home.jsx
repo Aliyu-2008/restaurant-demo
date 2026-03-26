@@ -1,8 +1,10 @@
-import { useEffect, useState, } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { CartContext } from "../context/CartContext";
 import { useParams } from "react-router-dom";
 
 export default function Home() {
+  const { addToCart } = useContext(CartContext);
   const { id } = useParams();
   const [dishes, setDishes] = useState([]);
 
@@ -49,9 +51,12 @@ export default function Home() {
               ₦{dish.price}
             </p>
 
-            <button className="mt-4 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-              Order Now
-            </button>
+           <button
+  onClick={() => addToCart(dish)}
+  className="mt-4 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+>
+  Order Now
+</button> 
           </div>
         ))}
       </div>

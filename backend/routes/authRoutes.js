@@ -69,14 +69,15 @@ router.post('/login', async (req, res) => {
 
     // ✅ Response
     res.json({
-      message: 'Login successful',
-      user: {
-        id: user.id,
-        fullName: user.fullName,
-        username: user.username
-      },
-      token: 'user-token' // temp (we upgrade later)
-    });
+  message: "Login successful",
+  user: {
+    id: user.id,
+    fullName: user.fullName,
+    username: user.username,
+    email: user.email,
+    phone: user.phone
+  }
+});
 
   } catch (err) {
     console.log('LOGIN ERROR:', err);
