@@ -23,11 +23,11 @@ export default function Profile() {
   useEffect(() => {
     loadUser();
 
-    // 🔥 listen for changes (important)
-    window.addEventListener("storage", loadUser);
+    // 🔥 reload when page becomes active (THIS IS THE REAL FIX)
+    window.addEventListener("focus", loadUser);
 
     return () => {
-      window.removeEventListener("storage", loadUser);
+      window.removeEventListener("focus", loadUser);
     };
   }, []);
 
