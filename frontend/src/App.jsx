@@ -57,6 +57,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
       </Routes>

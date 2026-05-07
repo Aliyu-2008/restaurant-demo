@@ -1,43 +1,58 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../models/Dish');
+const db = require("../config/db");
 
-// Get all dishes
-router.get('/', (req, res) => {
+// ✅ GET all dishes
+router.get("/", (req, res) => {
   try {
-    const dishes = db.prepare('SELECT * FROM dishes').all();
+    const dishes = db.prepare("SELECT * FROM dishes").all();
     res.json(dishes);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Create a dish
-router.post('/add', (req, res) => {
+// ✅ ADD dish
+router.post("/", (req, res) => {
+  const { name, price, description } = req.body;
+
   try {
-    const { name, price, description } = req.body;
-    db.prepare('INSERT INTO dishes (name, price, description) VALUES (?, ?, ?)').run(name, price, description);
-    res.status(201).json({ message: 'Dish added successfully' });
+    db.prepare(`
+      INSERT INTO dishes (name, price, description)
+      VALUES (?, ?, ?)
+    `).run(name, price, description);
+
+    res.json({ message: "Dish added" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Update a dishe
-router.put('/Update/:id', (req, res) => {
+// ✅ UPDATE dish
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, price, description } = req.body;
+
   try {
-    const dishes = db.prepare('UPDATE FROM dishes WHERE id ? ').all();
-    res.json(dishes);
+    db.prepare(`
+      UPDATE dishes
+      SET name = ?, price = ?, description = ?
+      WHERE id = ?
+    `).run(name, price, description, id);
+
+    res.json({ message: "Dish updated" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Delete a dishe
-router.delete('/Delete/:id', (req, res) => {
+// ✅ DELETE dish
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
   try {
-    const dishes = db.prepare('DELETE FROM dishes WHERE id ? ').run( id);
-    res.json(dishes);
+    db.prepare("DELETE FROM dishes WHERE id = ?").run(id);
+    res.json({ message: "Dish deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
