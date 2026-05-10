@@ -24,7 +24,8 @@ db.prepare(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL NOT NULL,
-    description TEXT
+    description TEXT,
+    image TEXT
   )
 `).run();
 

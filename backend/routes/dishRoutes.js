@@ -14,13 +14,13 @@ router.get("/", (req, res) => {
 
 // ✅ ADD dish
 router.post("/", (req, res) => {
-  const { name, price, description } = req.body;
+  const { name, price, description, image } = req.body;
 
   try {
     db.prepare(`
-      INSERT INTO dishes (name, price, description)
-      VALUES (?, ?, ?)
-    `).run(name, price, description);
+      INSERT INTO dishes (name, price, description, image)
+      VALUES (?, ?, ?, ?)
+    `).run(name, price, description, image);
 
     res.json({ message: "Dish added" });
   } catch (err) {
@@ -31,14 +31,14 @@ router.post("/", (req, res) => {
 // ✅ UPDATE dish
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const { name, price, description } = req.body;
+  const { name, price, description, image } = req.body;
 
   try {
     db.prepare(`
       UPDATE dishes
       SET name = ?, price = ?, description = ?
       WHERE id = ?
-    `).run(name, price, description, id);
+    `).run(name, price, description, id,);
 
     res.json({ message: "Dish updated" });
   } catch (err) {

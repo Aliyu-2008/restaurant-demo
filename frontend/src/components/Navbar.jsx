@@ -1,5 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { isLoggedIn, logout } from "../utils/auth";
+import { isLoggedIn, logout, getUser} from "../utils/auth";
+const user = getUser();
+const isAdminUser = user?.role === "admin";
+{isAdminUser && <Link to="/admin">Admin</Link>}
 
 export default function Navbar() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import API from "../api";
 import { CartContext } from "../context/CartContext";
 import { useParams } from "react-router-dom";
 
@@ -14,11 +14,11 @@ export default function Home() {
 
   const fetchDishes = async () => {
   try {
-    const url = id
-      ? `http://localhost:5000/api/dishes/${id}`
-      : `http://localhost:5000/api/dishes`;
-
-    const res = await axios.get(url);
+  const url = id
+  ? `/api/dishes/${id}`
+  : `/api/dishes`;
+  
+    const res = await API.get("/api/dishes");
     setDishes(res.data);
   } catch (err) {
     console.log(err);
@@ -45,6 +45,11 @@ export default function Home() {
             key={dish.id}
             className="bg-white shadow-lg rounded-xl p-5 hover:scale-105 transition"
           >
+            <img
+  src={dish.image}
+  alt={dish.name}
+  className="w-full h-48 object-cover rounded-lg mb-3"
+/>
             <h2 className="text-xl font-semibold">{dish.name}</h2>
             <p className="text-gray-500">{dish.description}</p>
             <p className="text-orange-500 font-bold mt-2">

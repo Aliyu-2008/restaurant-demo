@@ -1,16 +1,36 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Auth endpoints
-export const registerUser = (data) => API.post("/auth/register", data);
-export const loginUser = (data) => API.post("/auth/login", data);
+// ================= AUTH =================
 
-// Dishes endpoints
-export const getDishes = () => API.get("/dishes");
+export const registerUser = (data) =>
+  API.post("/api/auth/register", data);
 
-// Orders endpoints
-export const placeOrder = (data) => API.post("/orders", data);
-export const getOrders = () => API.get(`/orders/${user.id}`);
+export const loginUser = (data) =>
+  API.post("/api/auth/login", data);
+
+// ================= DISHES =================
+
+export const getDishes = () =>
+  API.get("/api/dishes");
+
+// ================= ORDERS =================
+
+export const placeOrder = (data) =>
+  API.post("/api/orders", data);
+
+export const getOrders = (userId) =>
+  API.get(`/api/orders/${userId}`);
+
+// ================= ADMIN =================
+
+export const createDish = (data) =>
+  API.post("/api/dishes", data);
+
+export const deleteDish = (id) =>
+  API.delete(`/api/dishes/${id}`);
+
+export default API;

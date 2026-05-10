@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -11,14 +16,20 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
+import Admin from "./pages/Admin";
+
+import { isAdmin } from "./utils/auth";
 
 export default function App() {
   return (
     <Router>
+
+      {/* Hide navbar on admin page later if needed */}
       <Navbar />
 
       <Routes>
-        {/* PUBLIC */}
+
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<Landing />} />
 
         <Route
@@ -39,7 +50,8 @@ export default function App() {
           }
         />
 
-        {/* PROTECTED */}
+        {/* PROTECTED USER ROUTES */}
+
         <Route
           path="/menu"
           element={
@@ -57,10 +69,40 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN ROUTE */}
+
+        <Route
+          path="/admin"
+          element={
+            isAdmin() ? (
+              <Admin />
+            ) : (
+              <Navigate to="/menu" />
+            )
+          }
+        />
+
       </Routes>
+
     </Router>
   );
 }

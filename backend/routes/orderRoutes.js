@@ -36,4 +36,37 @@ router.get("/:userId", (req, res) => {
   }
 });
 
+router.get("/admin/all", (req, res) => {
+  try {
+    const orders = db.prepare(`
+      SELECT
+        orders.id,
+        orders.quantity,
+
+        users.fullName AS customer_name,
+
+        dishes.name AS dish_name,
+        dishes.price,
+
+        (orders.quantity * dishes.price) AS total
+
+      FROM orders
+
+      JOIN users
+      ON orders.user_id = users.id
+
+      JOIN dishes
+      ON orders.dish_id = dishes.id
+
+      ORDER BY orders.id DESC
+    `).all();
+
+    res.json(orders);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
